@@ -1,64 +1,45 @@
 <?php
+declare (strict_types = 1);
 
-declare(strict_types=1);
+namespace  APP\Routing;
 
-namespace App\Routing;
-
-use App\Controller\Controller;
-use App\Controller\Elo;
 use App\Controller\Error404;
-use App\Controller\Login;
-use App\Controller\Logout;
-use App\Controller\Toto;
 use App\Controller\Welcome;
-use App\Controller\NewPlayer;
 
-class Router
-{
+    class router{
+    
     private array $routes = [
         '/' => Welcome::class,
-        '/bidule' => Toto::class,
-        '/404' => Error404::class,
-        '/elo' => Elo::class,
-        '/players/add' => NewPlayer::class,
-        '/login' => Login::class,
-        '/logout' => Logout::class
+        //'/' => \App\Controller\Welcome::class,
+        '/404' => Error404::class
     ];
 
-    private static string $path;
+    private static $path;
 
     private static ?Router $router = null;
-    private static ?array $user = null;
 
     private function __construct()
     {
-        self::$path = $_SERVER['PATH_INFO'] ?? '/';
-        self::$user = $_SESSION['user'] ?? null;
+        self::$path = $_SERVER['PATH_INFO'] ?? '/'; 
     }
 
-    public static function getFromGlobals(): Router
+    public static function getFromGlobals()
     {
-        if (self::$router === null) {
+        if(self::$router === null){
             self::$router = new self();
         }
 
-        return self::$router;
+        return new self;
     }
 
-    public function getController(): Controller
-    {
-        $controllerClass = $this->routes[self::$path] ?? $this->routes['/404'];
-        $controller = new $controllerClass();
-
-        if (!$controller instanceof Controller) {
-            throw new \LogicException("controller $controllerClass should implement ".Controller::class);
+    public function getController()
+        {
+            $controllerClass = $this->routes[self::$path] ?? $this->routes['/404'];
+            //appel classe inconnue -> déclenche spl_autoload_register
+            $controller = new $controllerClass();
+            $controller->render();
+            $controller->getWordJson();
+            $controller->cookie();
         }
-
-        return $controller;
     }
-
-    public static function getUser(): ?array
-    {
-        return self::$user;
-    }
-}
+?>
