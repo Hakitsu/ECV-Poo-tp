@@ -2,11 +2,11 @@
 
     declare (strict_types = 1);
     namespace App\Controller;
-    class Error404{
+    class Data{
         public function render(){
             echo "error404";
         }
     }
 
-
 ?>
+

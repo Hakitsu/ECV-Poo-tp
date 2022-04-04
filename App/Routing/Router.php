@@ -4,12 +4,12 @@ declare (strict_types = 1);
 namespace  APP\Routing;
 
 use App\Controller\Error404;
-use App\Controller\Welcome;
+use App\Controller\MotusController;
 
     class router{
     
     private array $routes = [
-        '/' => Welcome::class,
+        '/' => MotusController::class,
         //'/' => \App\Controller\Welcome::class,
         '/404' => Error404::class
     ];
@@ -40,6 +40,9 @@ use App\Controller\Welcome;
             $controller->render();
             $controller->getWordJson();
             $controller->cookie();
+            $controller->numberLetter();
+            $controller->findLetter();
+            $controller->checkLetter();
         }
     }
 ?>
