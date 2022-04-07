@@ -130,10 +130,6 @@
             }
         }
 
-        public function wordUsing(){
-
-        }
-
         public function render(){
             if(!isset($_COOKIE['findWord']) && !isset($_COOKIE['try'])){ $this->beginParti(); }
             if(isset($_COOKIE['try']) && $_COOKIE['try']==0) {
