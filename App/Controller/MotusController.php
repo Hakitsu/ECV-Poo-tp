@@ -95,7 +95,7 @@
 
 
                 if ($_COOKIE['try'] >= 6) {
-                    echo "<br>perdu, le mot a trouver était : ".$_COOKIE['findWord'].'<br> Revenez demain !';
+                    echo "<br>perdu, le mot a trouver était : ".$_COOKIE['findWord'].'<br> Revenez demain ! <br>';
                 }
             }else {
                 echo "<br>Bravo, le mot a trouver était : ".$_COOKIE['findWord'].'<br> Revenez demain !';
@@ -108,7 +108,7 @@
                 $letterFinding = json_decode($_COOKIE['findLetter'], true);
                 for ($i=0; $i < strlen($_COOKIE['findWord']); $i++) { 
                     if($i == 0){
-                       echo $_COOKIE['findWord'][$i];
+                        echo $_COOKIE['findWord'][$i];
                     }
                     elseif(isset($letterFinding[$i]) && $_COOKIE['findWord'][$i] == $letterFinding[$i]){
                         echo " ".$letterFinding[$i];;
@@ -117,6 +117,7 @@
                         echo " _";
                     }
                 }
+                echo "<br>";
             }else{
                 for ($i=0; $i < strlen($_COOKIE['findWord']); $i++) { 
                     if($i == 0){
@@ -135,9 +136,12 @@
 
         public function render(){
             if(!isset($_COOKIE['findWord']) && !isset($_COOKIE['try'])){ $this->beginParti(); }
-            if(isset($_COOKIE['try']) && $_COOKIE['try']==0) {$this->firstFindLetter();}
+            if(isset($_COOKIE['try']) && $_COOKIE['try']==0) {
+                $this->firstFindLetter();
+            }else{
+                $this->letterFinding();
+            }
             $this->checkLetter();
-            $this->letterFinding();
           }
         }
 ?>
