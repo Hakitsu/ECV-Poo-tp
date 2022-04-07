@@ -1,35 +1,35 @@
 [
     {
-        "name" : "mourir"
+        "word" : "mourir"
     },
     {
-        "name" : "paysage"
+        "word" : "paysage"
     },
     {
-        "name" : "continent"
+        "word" : "continent"
     },
     {
-        "name" : "fromage"
+        "word" : "fromage"
     },
     {
-        "name" : "pasteque"
+        "word" : "pasteque"
     },
     {
-        "name" : "sandwith"
+        "word" : "sandwith"
     },
     {
-        "name" : "poulet"
+        "word" : "poulet"
     },
     {
-        "name" : "cheval"
+        "word" : "cheval"
     },
     {
-        "name" : "origine"
+        "word" : "origine"
     },
     {
-        "name" : "hamburger"
+        "word" : "hamburger"
     },
     {
-        "name" : "tresor"
+        "word" : "tresor"
     }
 ]

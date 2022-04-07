@@ -38,10 +38,9 @@ use App\Controller\MotusController;
             //appel classe inconnue -> déclenche spl_autoload_register
             $controller = new $controllerClass();
             $controller->render();
-            $controller->getWordJson();
-            $controller->cookie();
+            $controller->beginParti();
             $controller->numberLetter();
-            $controller->findLetter();
+            $controller->firstFindLetter();
             $controller->checkLetter();
         }
     }
