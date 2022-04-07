@@ -3,15 +3,12 @@ declare (strict_types = 1);
 
 namespace  APP\Routing;
 
-use App\Controller\Error404;
 use App\Controller\MotusController;
 
     class router{
     
     private array $routes = [
-        '/' => MotusController::class,
-        //'/' => \App\Controller\Welcome::class,
-        '/404' => Error404::class
+        '/' => MotusController::class
     ];
 
     private static $path;
@@ -34,14 +31,10 @@ use App\Controller\MotusController;
 
     public function getController()
         {
-            $controllerClass = $this->routes[self::$path] ?? $this->routes['/404'];
+            $controllerClass = $this->routes[self::$path] ?? $this->routes['/'];
             //appel classe inconnue -> déclenche spl_autoload_register
             $controller = new $controllerClass();
             $controller->render();
-            $controller->beginParti();
-            $controller->numberLetter();
-            $controller->firstFindLetter();
-            $controller->checkLetter();
         }
     }
 ?>

@@ -7,6 +7,8 @@
         public string $word;
         public array $letterWord = [];
         public array $findLetterWord = [];
+        public array $letterIsFinding = [];
+        public array $wordUse = [];
         public SelectWord $selecWord;
         
         /*
@@ -31,36 +33,22 @@
 
             // Set les cookies
             $this->cookie();
+            header("location:http://localhost:8000/");
         }
 
         // SelectWordController
         public function cookie(){
-            if(empty($_COOKIE['findWord'])){
-                setcookie('findWord',$this->word,time()+60*60*24);
-            }
-            if(empty($_COOKIE['try'])){
-                setcookie('try','0',time()+60*60*24);
-            }
-            echo $_COOKIE['findWord'].',';
-            echo '<br>'.$_COOKIE['try'];
+            setcookie('findWord',$this->word,time()+60*60*24);
+            setcookie('try','0',time()+60*60*24);
         }
 
         // SPLIT en array->lettre 
         // pour chaque lettre qui possède -> On affiche un " _ "
 
-        public function numberLetter(){
-            for ($i=0; $i < strlen($_COOKIE['findWord']);$i++){
-                $letterTab[$i] = $_COOKIE['findWord'][$i];
-            }
-            print_r($letterTab);
-            echo "<br><br><br>";
-            return $letterTab;
-        }
-
         public function firstFindLetter(){
             for ($i=0; $i < strlen($_COOKIE['findWord']); $i++) { 
                 if($i == 0){
-                   echo $_COOKIE['findWord'][$i];
+                    echo $_COOKIE['findWord'][$i];
                 }
                 if($i != 0){
                     echo " _";
@@ -73,49 +61,83 @@
                 exit;
             }
             $try = $_GET['write'];
+
+            if (isset($_COOKIE['findLetter'])) {
+                $letterIsFinding = json_decode($_COOKIE['findLetter'], true);
+            }
             if (strlen($try) != strlen($_COOKIE['findWord'])) {
-                echo "<br>Trop de lettre";
+                echo "<br>Mot invalide : lettre manquant / en trop";
                 exit;
             }
-            echo "<br>";
             for ($i=0; $i < strlen($try);$i++){
                 if($_COOKIE['findWord'][$i] == $try[$i]){
-                    echo " ".$_COOKIE['findWord'][$i];
+                    echo   '<span style="color: lime">'.$_COOKIE['findWord'][$i]." </span>";
                     $findLetterWord[$i] = $try[$i];
+                    if (!isset($letterIsFinding[$i])) {
+                        $letterIsFinding[$i] = $findLetterWord[$i];
+                    }
                 }
                 if ($_COOKIE['findWord'][$i] != $try[$i]) {
-                    echo " _";
+                    if(strpos($_COOKIE['findWord'],$try[$i])){
+                        echo '<span style="color: orange" >'.$try[$i]." </span>";
+                    }else {
+                        echo '<span>'.$try[$i]." </span>";
+                    }
                 }
             }
             echo "<br>";
-            print_r($findLetterWord);
-            if (count($findLetterWord) != strlen($_COOKIE['findWord'])) {
-                // $numberTry => 1 
+            setcookie('findLetter',json_encode($letterIsFinding),time()+60*60*24);
+
+            if (count($letterIsFinding) != strlen($_COOKIE['findWord'])) {
+                //$numberTry => 1 
                 $numberTry = intval($_COOKIE['try'])+1;
                 setcookie('try',strval($numberTry));
+
+
                 if ($_COOKIE['try'] >= 6) {
                     echo "<br>perdu, le mot a trouver était : ".$_COOKIE['findWord'].'<br> Revenez demain !';
                 }
+            }else {
+                echo "<br>Bravo, le mot a trouver était : ".$_COOKIE['findWord'].'<br> Revenez demain !';
             }
         }
 
-        public function nextFindLetter(){
-            for ($i=0; $i < strlen($_COOKIE['findWord']); $i++) { 
-                if($i == 0){
-                   echo $_COOKIE['findLetter'][$i];
+        public function letterFinding(){
+            //echo str_pad($_COOKIE['findWord'][0],strlen($_COOKIE['findWord']),"_",STR_PAD_RIGHT);
+            if (isset($_COOKIE['findLetter'])) {
+                $letterFinding = json_decode($_COOKIE['findLetter'], true);
+                for ($i=0; $i < strlen($_COOKIE['findWord']); $i++) { 
+                    if($i == 0){
+                       echo $_COOKIE['findWord'][$i];
+                    }
+                    elseif(isset($letterFinding[$i]) && $_COOKIE['findWord'][$i] == $letterFinding[$i]){
+                        echo " ".$letterFinding[$i];;
+                    }
+                    else{
+                        echo " _";
+                    }
                 }
-                if($_COOKIE['findLetter'][$i] == null){
-                    echo " _";
-                }
-                if ($_COOKIE['findLetter'][$i] != null) {
-                    echo " ".$_COOKIE['findLetter'][$i];
+            }else{
+                for ($i=0; $i < strlen($_COOKIE['findWord']); $i++) { 
+                    if($i == 0){
+                        echo $_COOKIE['findWord'][$i];
+                    }
+                    if($i != 0){
+                        echo " _";
+                    }
                 }
             }
         }
 
+        public function wordUsing(){
+
+        }
 
         public function render(){
-            echo "welcome </br></br>";
+            if(!isset($_COOKIE['findWord']) && !isset($_COOKIE['try'])){ $this->beginParti(); }
+            if(isset($_COOKIE['try']) && $_COOKIE['try']==0) {$this->firstFindLetter();}
+            $this->checkLetter();
+            $this->letterFinding();
           }
         }
 ?>
