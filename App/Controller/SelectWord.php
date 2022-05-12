@@ -10,7 +10,7 @@
         public LoadWords $loadWord;
         private string $word;
         
-        function __construct()
+        public function __construct()
         {
             // Instancie la class -> LoadWords
             $this->loadWord = new LoadWords();
