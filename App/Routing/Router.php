@@ -1,14 +1,15 @@
 <?php
-declare (strict_types = 1);
 
-namespace  APP\Routing;
+declare(strict_types=1);
+
+namespace App\Routing;
 
 use App\Controller\MotusController;
 
-    class router{
-    
+class Router
+{
     private array $routes = [
-        '/' => MotusController::class
+        '/' => MotusController::class,
     ];
 
     private static $path;
@@ -17,24 +18,23 @@ use App\Controller\MotusController;
 
     private function __construct()
     {
-        self::$path = $_SERVER['PATH_INFO'] ?? '/'; 
+        self::$path = $_SERVER['PATH_INFO'] ?? '/';
     }
 
     public static function getFromGlobals()
     {
-        if(self::$router === null){
+        if (null === self::$router) {
             self::$router = new self();
         }
 
-        return new self;
+        return new self();
     }
 
-    public function getController()
-        {
-            $controllerClass = $this->routes[self::$path] ?? $this->routes['/'];
-            //appel classe inconnue -> déclenche spl_autoload_register
-            $controller = new $controllerClass();
-            $controller->render();
-        }
+    public function getController(): void
+    {
+        $controllerClass = $this->routes[self::$path] ?? $this->routes['/'];
+        // appel classe inconnue -> déclenche spl_autoload_register
+        $controller = new $controllerClass();
+        $controller->render();
     }
-?>
+}
